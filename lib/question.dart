@@ -21,6 +21,7 @@ class Question extends StatelessWidget {
     return Container(
       //it centers the text because e container moves the pos of the child
       width: double.infinity,
+      // the dot offers all the constructors of the class
       margin: EdgeInsets.all(10), //adds more space to the question block
       child: Text(
         _questionText,
@@ -35,3 +36,6 @@ class Question extends StatelessWidget {
 //it gets new text and rebuilds the widget with the new text and updates the screen
 // rebuild the stateless widget, not internally because internal data is immutable,
 // but because data from outside changed  when the build method ran again.
+
+// special constru
+//  Class.constr(this.var){*construction logic*}

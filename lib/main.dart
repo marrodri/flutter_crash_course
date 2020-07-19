@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +11,7 @@ void main() {
 // void is a type of datathat means nothing
 //null is a value that means nothing, 0
 
-// 
+//
 // this class, can be recreated
 //any external data passed, will recreate with the new data, rebuilding the output
 class MyApp extends StatefulWidget {
@@ -18,22 +19,21 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-//the state class is persitent, its attached to the widget 
+//the state class is persitent, its attached to the widget
 // any data here its not recreated, neither reset here in state
 // the _ to the class name transform a public class into a private class
 class _MyAppState extends State<MyApp> {
   //common practice
   var _questionIndex = 0;
-  
-  void answerQuestion() {
+
+  void _answerQuestion() {
     //takes a function
     //setState is a func that forces to re-rend a part of the UI
     //it calls build again based of this current widget and class data
-    setState( 
-      () {
+    setState(() {
       _questionIndex = _questionIndex + 1;
-      } //anonymous function
-    ); //SetState 
+    } //anonymous function
+        ); //SetState
     // questionIndex = questionIndex + 1;
   }
 
@@ -41,9 +41,21 @@ class _MyAppState extends State<MyApp> {
   //this returns a widget
   //every widget is a dart class, that has a build method
   Widget build(BuildContext context) {
+    //adding a data structure for the questions and for the answers
+    // creating a list of maps
     var questions = [
-      'Whats your favorite color?',
-      'Whats your favorite animal?',
+      {
+        'questionText': 'Whats your favorite color?',
+        'answers': ['black', 'red', 'green', 'white'],
+      },
+      {
+        'questionText': 'Whats your favorite animal?',
+        'answers': ['rabbit', 'cat', 'dog', 'penguin'],
+      },
+      {
+        'questionText': 'who\'s your favorite instructor?',
+        'answers': ['max', 'max', 'max', 'max'],
+      },
     ];
 
     return MaterialApp(
@@ -53,27 +65,21 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: <Widget>[
-            
-            Question(questions[_questionIndex],),
-            RaisedButton(
-              child: Text('answer1'),
-              //it passes the pointer of the function answerQuestion,
-              // and not the returned value of the function answerQuestion(),
-              // because it executes right away when the parenthesis are on the code
-              onPressed: answerQuestion,
+            Question(
+              questions[_questionIndex]['questionText'],
             ),
-            RaisedButton(
-              child: Text('answer2'),
-              //anonymous function, arrow pattern
-              onPressed: () => print('Answer 2 chosen'),
-            ),
-            RaisedButton(
-              child: Text('answer3'),
-              //anonymous function, normal pattern
-              onPressed: () {
-                print('Answer 3 chosen');
-              },
-            ),
+            //passing the address of the function is known as "callback",
+            // because the receiving widget calls it later in the future
+            //here we have a list of widgets
+            // the map method executes the function on every element of the list
+            // iterate for every answer in the answers list 
+            // of the current questions index
+            //the parenthesis will make the 'answers' will have a list of strings
+            //the dots take a list and pulls all the values of the nested list out of it
+            // , and add them to the current list and individual values, making just one list
+            ...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList(), //the toList(), will make like transform the map to a list
           ],
         ),
       ),
@@ -81,11 +87,10 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-
 //state is Data/Info used by your App
 // App State, Authenticated Users, Loaded Jobs, etc.
 // Widget State: Current User Input, Is a Loading Spinner being shown?, etc.
 // this state can change di
 // Learn more about state in flutter and search stateless vs stateful, important (crash course vid at 3:29:51)
 
- //a good rule is using one main widget per file
+//a good rule is using one main widget per file
